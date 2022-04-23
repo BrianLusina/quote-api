@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:12
+    container_name: curtz-db
+    environment:
+      POSTGRES_USER: curtz-user
+      POSTGRES_PASSWORD: curtz-pass
+      POSTGRES_DB: curtz-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
