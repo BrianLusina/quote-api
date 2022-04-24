@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        go-version: [1.17.x, 1.18.x]
+        go-version: [1.18.x]
         platform: [ubuntu-latest]
       fail-fast: false
 
@@ -30,13 +30,8 @@ jobs:
     - name: Install Dependencies
       run: make install
 
-    - name: Run Staging Build
-      if: github.ref_name == 'develop'
+    - name: Run Build
       run: make build
-      env:
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        ENV: staging
-        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - name: Create Sentry Staging release
       if: github.ref_name == 'develop'
@@ -47,17 +42,6 @@ jobs:
         SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
       with:
         environment: staging
-        sourcemaps: ./build/static/js
-
-    - name: Run Production Build
-      if: github.ref_name == 'main'
-      run: make build
-      env:
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        ENV: production
-        NODE_ENV: production
-        BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
 
     - name: Create Sentry Production release
       if: github.ref_name == 'main'
@@ -68,4 +52,3 @@ jobs:
         SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
       with:
         environment: production
-        sourcemaps: ./build/static/js
