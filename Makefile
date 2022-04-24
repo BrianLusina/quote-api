@@ -90,7 +90,7 @@ lint:
 
 build:
 	@echo "Building application"
-	go build -o $(BIN_DIR) cmd/app/main.go
+	go build -o $(BIN_DIR) app/cmd/main.go
 
 # See https://circleci.com/docs/2.0/local-cli/#processing-a-config
 validate-circleci:
