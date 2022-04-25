@@ -3,17 +3,18 @@ package main
 import (
 	"fmt"
 	"quote/api/app/api/health"
+	"quote/api/app/api/quotes"
 	"quote/api/app/config"
+	"quote/api/app/internal/core/interactor"
+	"quote/api/app/internal/repositories"
 	"quote/api/app/server"
 	"quote/api/app/server/middleware"
 	"quote/api/app/server/router"
 	"quote/api/app/tools"
 	"quote/api/app/tools/logger"
+	"quote/api/app/utils/monitoring"
 
 	"github.com/joho/godotenv"
-	urlApi "github.com/sanctumlabs/curtz/api/url"
-	"github.com/sanctumlabs/curtz/internal/repositories"
-	"github.com/sanctumlabs/curtz/internal/services/urlsvc"
 
 	"strconv"
 )
@@ -28,10 +29,11 @@ const (
 	EnvDatabaseUsername = "DATABASE_USERNAME"
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
+	EnvSentryDsn        = "SENTRY_DSN"
 )
 
 func main() {
-	log := logger.NewLogger("vehicle-api")
+	log := logger.NewLogger("quotes-api")
 
 	err := godotenv.Load()
 	if err != nil {
@@ -43,10 +45,11 @@ func main() {
 	logJsonOutput := tools.EnvOr(EnvLogJsonOutput, "true")
 	port := tools.EnvOr(EnvPort, "8080")
 	host := tools.EnvOr(EnvDatabaseHost, "localhost")
-	database := tools.EnvOr(EnvDatabase, "curtz-db")
-	databaseUser := tools.EnvOr(EnvDatabaseUsername, "curtz-user")
-	databasePass := tools.EnvOr(EnvDatabasePassword, "curtz-pass")
+	database := tools.EnvOr(EnvDatabase, "quotes-db")
+	databaseUser := tools.EnvOr(EnvDatabaseUsername, "quotes-user")
+	databasePass := tools.EnvOr(EnvDatabasePassword, "quotes-pass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
+	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -67,7 +70,14 @@ func main() {
 			Password: databasePass,
 			Port:     databasePort,
 		},
+		Monitoring: config.Monitoring{
+			Sentry: config.Sentry{
+				Dsn: sentryDsn,
+			},
+		},
 	}
+
+	monitoring.InitializeMonitoring(configuration.Monitoring)
 
 	srv := server.NewServer(&configuration)
 
@@ -75,23 +85,25 @@ func main() {
 	corsMiddleware := middleware.NewCORSMiddleware(configuration.CorsHeaders)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
-
-	repository := repositories.NewRepository(configuration.Database)
-	urlService := urlsvc.NewUrlService(repository.GetUrlRepo())
-
-	// setup routers
-	routers := []router.Router{
-		urlApi.NewUrlRouter(urlService),
-		health.NewHealthRouter(),
-	}
-
-	// initialize routers
-	srv.InitRouter(routers...)
+	monitoringMiddleware := middleware.NewMonitoringMiddleware()
 
 	// use middlewares
 	srv.UseMiddleware(loggingMiddleware)
 	srv.UseMiddleware(corsMiddleware)
 	srv.UseMiddleware(recoveryMiddleware)
+	srv.UseMiddleware(monitoringMiddleware)
+
+	repository := repositories.NewRepository(configuration.Database)
+	quotesService := interactor.NewQuoteInteractor(repository.GetQuotesRepo())
+
+	// setup routers
+	routers := []router.Router{
+		quotes.NewQuotesRouter(quotesService),
+		health.NewHealthRouter(),
+	}
+
+	// initialize routers
+	srv.InitRouter(routers...)
 
 	appServer := srv.CreateServer()
 

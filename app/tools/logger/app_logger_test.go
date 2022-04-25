@@ -5,10 +5,9 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"quote/api/app/pkg"
 	"testing"
 	"time"
-
-	"quote/api/pkg"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"

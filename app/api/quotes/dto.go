@@ -1,15 +1,8 @@
-package url
+package quotes
 
 type QuoteDto struct {
-	author string
-	quote  string
+	author string `json:"author"`
+	quote  string `json:"quote"`
 }
 
-type CreateQuoteRequestDto struct {
-	author string
-	quote  string
-}
-
-type QuoteResponseDto struct {
-	quotes []QuoteDto
-}
+type QuoteResponseDto []QuoteDto
