@@ -1,7 +1,7 @@
-package domain
+package entity
 
 import (
-	"quote/api/app/internal/core/domain/entity"
+	"quote/api/app/pkg"
 	"quote/api/app/pkg/identifier"
 	"strings"
 )
@@ -10,12 +10,12 @@ type Quote struct {
 	identifier.ID[Quote]
 	Author string
 	Quote  string
-	entity.BaseEntity
+	BaseEntity
 }
 
 func NewQuote(author, quote string) (*Quote, error) {
 	if len(quote) == 0 {
-		return nil, ErrInvalidQuote
+		return nil, pkg.ErrInvalidQuote
 	}
 
 	id := identifier.New[Quote]()
@@ -30,7 +30,7 @@ func NewQuote(author, quote string) (*Quote, error) {
 		ID:         id,
 		Quote:      quote,
 		Author:     author,
-		BaseEntity: entity.NewBaseEntity(),
+		BaseEntity: NewBaseEntity(),
 	}, nil
 }
 

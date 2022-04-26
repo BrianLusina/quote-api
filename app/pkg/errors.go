@@ -3,7 +3,8 @@ package pkg
 import "errors"
 
 var (
-	ErrServerError = errors.New("unexpected error encountered in server side")
+	ErrServerError  = errors.New("unexpected error encountered in server side")
+	ErrInvalidQuote = errors.New("invalid quote")
 )
 
 type Error struct {

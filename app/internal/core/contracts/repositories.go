@@ -1,10 +1,12 @@
 package contracts
 
-import "quote/api/app/internal/core/domain"
+import (
+	"quote/api/app/internal/core/domain/entity"
+)
 
 type QuoteRepository interface {
-	Save(domain.Quote) (domain.Quote, error)
-	GetAllQuotes() ([]domain.Quote, error)
-	GetQuote(id string) (domain.Quote, error)
-	UpdateQuote(domain.Quote) (domain.Quote, error)
+	Save(entity.Quote) (entity.Quote, error)
+	GetAllQuotes() ([]entity.Quote, error)
+	GetQuote(id string) (entity.Quote, error)
+	UpdateQuote(entity.Quote) (entity.Quote, error)
 }

@@ -1,18 +1,18 @@
 package quotes
 
 import (
-	"quote/api/app/internal/core/interactor"
+	"quote/api/app/internal/core/domain"
 	"quote/api/app/server/router"
 )
 
 // quoteHandler is a router for quotes handler
 type quotesRouter struct {
-	svc    *interactor.QuoteInteractor
+	svc    *domain.QuotesUseCase
 	routes []router.Route
 }
 
 // NewQuoteHandler initializes a new router
-func NewQuotesRouter(svc *interactor.QuoteInteractor) router.Router {
+func NewQuotesRouter(svc *domain.QuotesUseCase) router.Router {
 	r := &quotesRouter{
 		svc: svc,
 	}
@@ -28,5 +28,6 @@ func (hdl *quotesRouter) Routes() []router.Route {
 func (hdl *quotesRouter) initRoutes() {
 	hdl.routes = []router.Route{
 		router.NewGetRoute("/quotes", hdl.getAllQuotes),
+		router.NewPostRoute("/quotes", hdl.createQuote),
 	}
 }

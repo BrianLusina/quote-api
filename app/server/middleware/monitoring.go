@@ -23,8 +23,10 @@ func NewMonitoringMiddleware() Middleware {
 			err := recover()
 
 			if err != nil {
+				log.Errorf("Error encountered %s", err)
+
 				if hub != nil {
-					log.Errorf("Error encountered %s", err)
+					log.Errorf("Exception captured")
 
 					hub.CaptureException(err.(error))
 					hub.Flush((time.Second * 5))

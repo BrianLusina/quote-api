@@ -5,7 +5,7 @@ import (
 	"quote/api/app/api/health"
 	"quote/api/app/api/quotes"
 	"quote/api/app/config"
-	"quote/api/app/internal/core/interactor"
+	"quote/api/app/internal/core/domain"
 	"quote/api/app/internal/repositories"
 	"quote/api/app/server"
 	"quote/api/app/server/middleware"
@@ -88,13 +88,13 @@ func main() {
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
 
 	// use middlewares
-	srv.UseMiddleware(loggingMiddleware)
-	srv.UseMiddleware(corsMiddleware)
 	srv.UseMiddleware(recoveryMiddleware)
 	srv.UseMiddleware(monitoringMiddleware)
+	srv.UseMiddleware(loggingMiddleware)
+	srv.UseMiddleware(corsMiddleware)
 
 	repository := repositories.NewRepository(configuration.Database)
-	quotesService := interactor.NewQuoteInteractor(repository.GetQuotesRepo())
+	quotesService := domain.NewQuotesUseCase(repository.GetQuotesRepo())
 
 	// setup routers
 	routers := []router.Router{
