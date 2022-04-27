@@ -1,4 +1,4 @@
-package pkg
+package errdefs
 
 import "errors"
 
