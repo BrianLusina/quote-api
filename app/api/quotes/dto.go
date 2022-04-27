@@ -1,8 +1,9 @@
 package quotes
 
 type QuoteDto struct {
-	Author string `json:"author" validate:"required" binding:"required"`
-	Quote  string `json:"quote" validate:"required" binding:"required"`
+	Identifier string `json:"id"`
+	Author     string `json:"author" default:"unknown"`
+	Quote      string `json:"quote" validate:"required" binding:"required"`
 }
 
 type QuoteResponseDto struct {
