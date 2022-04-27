@@ -57,7 +57,7 @@ func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 	var allQuotes []entity.Quote
 	for _, quote := range quotes {
 		allQuotes = append(allQuotes, entity.Quote{
-			ID:     identifier.ID[entity.Quote].FromString(quote.Identifier),
+			ID:     identifier.New().FromString(quote.Identifier),
 			Quote:  quote.Quote,
 			Author: quote.Author,
 			BaseEntity: entity.BaseEntity{
@@ -70,7 +70,23 @@ func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 }
 
 func (q *QuotesRepo) GetQuote(id string) (entity.Quote, error) {
-	panic("implement me")
+	var quote models.Quote
+	result := q.db.Where(&models.Quote{BaseModel: models.BaseModel{Identifier: id}}).First(&quote)
+
+	if result.Error != nil {
+		q.log.Errorf("Error quering quote: %v", result.Error)
+		return entity.Quote{}, result.Error
+	}
+
+	return entity.Quote{
+		ID:     identifier.New().FromString(quote.Identifier),
+		Quote:  quote.Quote,
+		Author: quote.Author,
+		BaseEntity: entity.BaseEntity{
+			CreatedAt: quote.CreatedAt,
+			UpdatedAt: quote.UpdatedAt,
+		},
+	}, nil
 }
 
 func (q *QuotesRepo) UpdateQuote(quote entity.Quote) (entity.Quote, error) {

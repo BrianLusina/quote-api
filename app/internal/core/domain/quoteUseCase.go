@@ -33,3 +33,11 @@ func (q *QuotesUseCase) GetAllQuotes() ([]entity.Quote, error) {
 	}
 	return allQuotes, nil
 }
+
+func (q *QuotesUseCase) GetQuote(id string) (entity.Quote, error) {
+	quote, err := q.quoteRepo.GetQuote(id)
+	if err != nil {
+		return entity.Quote{}, err
+	}
+	return quote, nil
+}

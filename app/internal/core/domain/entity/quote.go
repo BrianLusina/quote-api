@@ -1,13 +1,13 @@
 package entity
 
 import (
-	"quote/api/app/pkg"
+	"quote/api/app/internal/errdefs"
 	"quote/api/app/pkg/identifier"
 	"strings"
 )
 
 type Quote struct {
-	identifier.ID[Quote]
+	identifier.ID
 	Author string
 	Quote  string
 	BaseEntity
@@ -15,10 +15,10 @@ type Quote struct {
 
 func NewQuote(author, quote string) (*Quote, error) {
 	if len(quote) == 0 {
-		return nil, pkg.ErrInvalidQuote
+		return nil, errdefs.ErrInvalidQuote
 	}
 
-	id := identifier.New[Quote]()
+	id := identifier.New()
 
 	if author == "" {
 		author = "Unknown"
@@ -32,8 +32,4 @@ func NewQuote(author, quote string) (*Quote, error) {
 		Author:     author,
 		BaseEntity: NewBaseEntity(),
 	}, nil
-}
-
-func (q Quote) Prefix() string {
-	return "quote"
 }

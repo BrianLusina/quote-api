@@ -1,29 +1,26 @@
 package identifier
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/rs/xid"
 )
 
-type ResourceType interface{ Prefix() string }
+type ID xid.ID
 
-type ID[T ResourceType] xid.ID
-
-func New[T ResourceType]() ID[T] {
-	return ID[T](xid.New())
+func New() ID {
+	return ID(xid.New())
 }
 
-func (id ID[T]) String() string {
-	var resourceType T
-	return fmt.Sprintf("%s_%s", resourceType.Prefix(), xid.ID(id).String())
+func (id ID) String() string {
+	return xid.ID(id).String()
 }
 
-func (id ID[T]) FromString(idString string) ID[T] {
+func (id ID) FromString(idString string) ID {
 	value, err := xid.FromString(idString)
 	if err != nil {
-		fmt.Errorf("failed to parse id %v", err.Error())
+		log.Println("failed to parse id: ", err.Error())
 	}
 
-	return ID[T](value)
+	return ID(value)
 }
