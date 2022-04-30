@@ -4,6 +4,5 @@ trustedRegistries:
   - ghcr.io
 
 ignored:
-    - DL3013
     - DL3017
     - DL3018
