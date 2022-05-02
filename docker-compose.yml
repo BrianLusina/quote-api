@@ -13,5 +13,58 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  initdb:
+    image: cockroachdb/cockroach:v21.2.9
+    container_name: quotes-init
+    environment:
+      DATABASE_NAME: quotesdb
+      DATABASE_HOST: db1
+      DATABASE_PORT: 26257
+    command: |
+      sql --insecure --host=db1:$DATABASE_PORT --execute="CREATE DATABASE IF NOT EXISTS quotesdb;"
+    volumes:
+      - ./scripts/initdb.sh:/initdb.sh
+    depends_on:
+      - db1
+
+  db1:
+    image: cockroachdb/cockroach:v21.2.9
+    container_name: quotes-db1
+    hostname: db1
+    environment:
+      COCKROACH_USER: quotes-user
+      COCKROACH_PASSWORD: quotes-pass
+    ports:
+      - 26257:26257
+      - 8080:8080
+    command: start --insecure --join=db1,db2,db3
+    volumes:
+      - db1:/cockroach/cockroach-data
+
+  db2:
+    image: cockroachdb/cockroach:v21.2.9
+    container_name: quotes-db2
+    hostname: db2
+    command: start --insecure --join=db1,db2,db3
+    environment:
+      COCKROACH_USER: quotes-user
+      COCKROACH_PASSWORD: quotes-pass
+    volumes:
+      - db2:/cockroach/cockroach-data
+
+  db3:
+    image: cockroachdb/cockroach:v21.2.9
+    container_name: quotes-db3
+    hostname: db3
+    command: start --insecure --join=db1,db2,db3
+    environment:
+      COCKROACH_USER: quotes-user
+      COCKROACH_PASSWORD: quotes-pass
+    volumes:
+      - db3:/cockroach/cockroach-data
+
 volumes:
   db:
+  db1:
+  db2:
+  db3:
