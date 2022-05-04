@@ -25,8 +25,8 @@ const (
 	EnvLogJsonOutput    = "LOG_JSON_OUTPUT"
 	EnvPort             = "PORT"
 	EnvDatabaseHost     = "DATABASE_HOST"
-	EnvDatabase         = "DATABASE"
-	EnvDatabaseUsername = "DATABASE_USERNAME"
+	EnvDatabase         = "DATABASE_NAME"
+	EnvDatabaseUsername = "DATABASE_USER"
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
 	EnvSentryDsn        = "SENTRY_DSN"
@@ -45,9 +45,9 @@ func main() {
 	logJsonOutput := tools.EnvOr(EnvLogJsonOutput, "true")
 	port := tools.EnvOr(EnvPort, "8080")
 	host := tools.EnvOr(EnvDatabaseHost, "localhost")
-	database := tools.EnvOr(EnvDatabase, "quotes-db")
-	databaseUser := tools.EnvOr(EnvDatabaseUsername, "quotes-user")
-	databasePass := tools.EnvOr(EnvDatabasePassword, "quotes-pass")
+	database := tools.EnvOr(EnvDatabase, "quotesdb")
+	databaseUser := tools.EnvOr(EnvDatabaseUsername, "quotesUser")
+	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
 

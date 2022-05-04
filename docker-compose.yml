@@ -5,9 +5,9 @@ services:
     image: postgres:12
     container_name: quotes-db
     environment:
-      POSTGRES_USER: quotes-user
-      POSTGRES_PASSWORD: quotes-pass
-      POSTGRES_DB: quotes-db
+      POSTGRES_USER: quotesUser
+      POSTGRES_PASSWORD: quotesPass
+      POSTGRES_DB: quotesdb
     ports:
       - "5432:5432"
     volumes:
@@ -18,12 +18,12 @@ services:
     container_name: quotes-init
     environment:
       DATABASE_NAME: quotesdb
+      DATABASE_USER: quotesUser
+      DATABASE_PASSWORD: quotesPass
       DATABASE_HOST: db1
       DATABASE_PORT: 26257
     command: |
-      sql --insecure --host=db1:$DATABASE_PORT --execute="CREATE DATABASE IF NOT EXISTS quotesdb;"
-    volumes:
-      - ./scripts/initdb.sh:/initdb.sh
+      sql --insecure --host=db1:$DATABASE_PORT --execute="CREATE DATABASE IF NOT EXISTS $DATABASE_NAME; CREATE USER IF NOT EXISTS '$DATABASE_USER';GRANT ALL ON DATABASE $DATABASE_NAME TO $DATABASE_USER;"
     depends_on:
       - db1
 
