@@ -65,15 +65,38 @@ func (hdl *quotesRouter) getAllQuotes(ctx *gin.Context) {
 		return
 	}
 
-	response := make([]QuoteResponsesDto, len(quotes))
-	for idx, quote := range quotes {
-		response[idx] = QuoteResponsesDto{
-			QuoteDto{
-				Identifier: quote.ID.String(),
-				Quote:      quote.Quote,
-				Author:     quote.Author,
+	response := QuoteResponsesDto{}
+	for _, quote := range quotes {
+		response = append(response, QuoteResponseDto{
+			Identifier: quote.ID.String(),
+			QuoteDto: QuoteDto{
+				Quote:  quote.Quote,
+				Author: quote.Author,
 			},
-		}
+			CreatedAt: quote.CreatedAt.Format(time.RFC3339),
+			UpdatedAt: quote.UpdatedAt.Format(time.RFC3339),
+		})
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}
+
+func (hdl *quotesRouter) getRandomQuote(ctx *gin.Context) {
+	quote, err := hdl.svc.GetRandomQuote()
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	response := QuoteResponseDto{
+		Identifier: quote.ID.String(),
+		QuoteDto: QuoteDto{
+			Quote:  quote.Quote,
+			Author: quote.Author,
+		},
+		CreatedAt: quote.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: quote.UpdatedAt.Format(time.RFC3339),
 	}
 
 	ctx.JSON(http.StatusOK, response)

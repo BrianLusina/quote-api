@@ -27,8 +27,9 @@ func (hdl *quotesRouter) Routes() []router.Route {
 
 func (hdl *quotesRouter) initRoutes() {
 	hdl.routes = []router.Route{
-		router.NewPostRoute("/quotes", hdl.createQuote),
-		router.NewGetRoute("/quotes", hdl.getAllQuotes),
-		router.NewGetRoute("/quotes/:id", hdl.getQuote),
+		router.NewPostRoute("/api/v1/quotes", hdl.createQuote),
+		router.NewGetRoute("/api/v1/quotes", hdl.getAllQuotes),
+		router.NewGetRoute("/api/v1/quotes/:id", hdl.getQuote),
+		router.NewGetRoute("/api/v1/quotes/random", hdl.getRandomQuote),
 	}
 }

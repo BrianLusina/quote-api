@@ -13,4 +13,4 @@ type QuoteResponseDto struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-type QuoteResponsesDto []QuoteDto
+type QuoteResponsesDto []QuoteResponseDto

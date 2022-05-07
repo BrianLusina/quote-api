@@ -1,8 +1,10 @@
 package domain
 
 import (
+	"math/rand"
 	"quote/api/app/internal/core/contracts"
 	"quote/api/app/internal/core/domain/entity"
+	"time"
 )
 
 type QuotesUseCase struct {
@@ -40,4 +42,18 @@ func (q *QuotesUseCase) GetQuote(id string) (entity.Quote, error) {
 		return entity.Quote{}, err
 	}
 	return quote, nil
+}
+
+func (q *QuotesUseCase) GetRandomQuote() (entity.Quote, error) {
+	quotes, err := q.quoteRepo.GetAllQuotes()
+	if err != nil {
+		return entity.Quote{}, err
+	}
+
+	// randomize and pick one quote
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(quotes))
+	randomQuote := quotes[randomIndex]
+
+	return randomQuote, nil
 }

@@ -32,7 +32,6 @@ func (q *QuotesRepo) Save(quote entity.Quote) (entity.Quote, error) {
 			Identifier: quote.ID.String(),
 			CreatedAt:  time.Now(),
 			UpdatedAt:  time.Now(),
-			DeletedAt:  nil,
 		},
 	}
 
