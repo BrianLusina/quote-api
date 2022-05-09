@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"quote/api/app/api/health"
 	"quote/api/app/api/quotes"
@@ -12,6 +13,7 @@ import (
 	"quote/api/app/server/router"
 	"quote/api/app/tools"
 	"quote/api/app/tools/logger"
+	"quote/api/app/utils/cache"
 	"quote/api/app/utils/monitoring"
 
 	"github.com/joho/godotenv"
@@ -30,9 +32,16 @@ const (
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
 	EnvSentryDsn        = "SENTRY_DSN"
+	EnvCacheHost        = "CACHE_HOST"
+	EnvCachePort        = "CACHE_PORT"
+	EnvCacheDb          = "CACHE_DB"
+	EnvCacheUsername    = "CACHE_USERNAME"
+	EnvCachePassword    = "CACHE_PASSWORD"
 )
 
 func main() {
+	ctx := context.Background()
+
 	log := logger.NewLogger("quotes-api")
 
 	err := godotenv.Load()
@@ -50,6 +59,11 @@ func main() {
 	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
+	cacheHost := tools.EnvOr(EnvCacheHost, "localhost")
+	cacheDb := tools.EnvOr(EnvCacheDb, "0")
+	cachePort := tools.EnvOr(EnvCachePort, "6379")
+	cacheUsername := tools.EnvOr(EnvCacheUsername, "quotesUser")
+	cachePassword := tools.EnvOr(EnvCachePassword, "quotesPass")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -75,7 +89,16 @@ func main() {
 				Dsn: sentryDsn,
 			},
 		},
+		Cache: config.CacheConfig{
+			Host:     cacheHost,
+			Port:     cachePort,
+			Db:       cacheDb,
+			Username: cacheUsername,
+			Password: cachePassword,
+		},
 	}
+
+	cache := cache.New(ctx, configuration.Cache)
 
 	monitoring.InitializeMonitoring(configuration.Monitoring)
 
@@ -98,7 +121,7 @@ func main() {
 
 	// setup routers
 	routers := []router.Router{
-		quotes.NewQuotesRouter(quotesService),
+		quotes.NewQuotesRouter(cache, quotesService),
 		health.NewHealthRouter(),
 	}
 

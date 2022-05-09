@@ -63,8 +63,18 @@ services:
     volumes:
       - db3:/cockroach/cockroach-data
 
+  cache:
+    image: redis:7.0.0
+    hostname: redis
+    container_name: quotes-cache
+    ports:
+      - 6379:6379
+    volumes:
+      - cache:/data
+
 volumes:
   db:
   db1:
   db2:
   db3:
+  cache:
