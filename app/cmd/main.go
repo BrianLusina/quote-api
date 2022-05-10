@@ -30,6 +30,8 @@ const (
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
 	EnvSentryDsn        = "SENTRY_DSN"
+	EnvUsername         = "USERNAME"
+	EnvPassword         = "PASSWORD"
 )
 
 func main() {
@@ -50,6 +52,8 @@ func main() {
 	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
+	username := tools.EnvOr(EnvUsername, "username")
+	password := tools.EnvOr(EnvPassword, "password")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -75,6 +79,10 @@ func main() {
 				Dsn: sentryDsn,
 			},
 		},
+		Auth: config.AuthConfig{
+			Username: username,
+			Password: password,
+		},
 	}
 
 	monitoring.InitializeMonitoring(configuration.Monitoring)
@@ -86,12 +94,14 @@ func main() {
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
+	authMiddleware := middleware.NewAuthenticationMiddleware(configuration.Auth)
 
 	// use middlewares
 	srv.UseMiddleware(recoveryMiddleware)
 	srv.UseMiddleware(monitoringMiddleware)
 	srv.UseMiddleware(loggingMiddleware)
 	srv.UseMiddleware(corsMiddleware)
+	srv.UseMiddleware(authMiddleware)
 
 	repository := repositories.NewRepository(configuration.Database)
 	quotesService := domain.NewQuotesUseCase(repository.GetQuotesRepo())

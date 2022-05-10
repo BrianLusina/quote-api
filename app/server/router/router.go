@@ -20,9 +20,9 @@ type Route interface {
 
 // NewRoute initializes a new local route for the router.
 func NewRoute(method, path string, handler func(ctx *gin.Context), opts ...RouteWrapper) Route {
-	var r Route = localRoute{method, path, handler}
-	for _, o := range opts {
-		r = o(r)
+	var route Route = localRoute{method, path, handler}
+	for _, opt := range opts {
+		route = opt(route)
 	}
-	return r
+	return route
 }

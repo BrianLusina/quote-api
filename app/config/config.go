@@ -8,4 +8,5 @@ type Config struct {
 	Version     string
 	Database    DatabaseConfig
 	Monitoring  Monitoring
+	Auth        AuthConfig
 }
