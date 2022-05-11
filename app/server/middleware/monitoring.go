@@ -10,7 +10,7 @@ import (
 )
 
 func NewMonitoringMiddleware() Middleware {
-	log := logger.NewLogger("log-monitoring")
+	log := logger.NewLogger("monitoring-log")
 	return func(ctx *gin.Context) {
 		log.Info("Monitoring middleware is enabled")
 		sentrygin.New(sentrygin.Options{
