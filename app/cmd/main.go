@@ -52,8 +52,9 @@ func main() {
 	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
-	username := tools.EnvOr(EnvUsername, "username")
-	password := tools.EnvOr(EnvPassword, "password")
+	username := tools.EnvOr(EnvUsername, "admin")
+	password := tools.EnvOr(EnvPassword, "admin")
+	allowedOrigins := tools.EnvOr("ALLOWED_ORIGINS", "*")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -66,6 +67,9 @@ func main() {
 		Logging: config.LoggingConfig{
 			Level:            logLevel,
 			EnableJSONOutput: enableJsonOutput,
+		},
+		Cors: config.CorsConfig{
+			AllowedOrigins: allowedOrigins,
 		},
 		Database: config.DatabaseConfig{
 			Host:     host,
@@ -90,7 +94,7 @@ func main() {
 	srv := server.NewServer(&configuration)
 
 	// middlewares for the server
-	corsMiddleware := middleware.NewCORSMiddleware(configuration.CorsHeaders)
+	corsMiddleware := middleware.NewCORSMiddleware(configuration.Cors)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
