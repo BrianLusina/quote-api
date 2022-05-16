@@ -37,15 +37,15 @@ jobs:
         path: |
           **/node_modules
           **/.eslintcache
-          ${{ steps.cache-dir-path.outputs.dir }}          
+          ${{ steps.cache-dir-path.outputs.dir }}
         key: ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'    
+      if: steps.cache.outputs.cache-hit != 'true'
       run: yarn install
-    
+
     - name: Danger CI Check
       uses: danger/danger-js@9.1.8
       env:

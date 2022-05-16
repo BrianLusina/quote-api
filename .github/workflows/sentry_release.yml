@@ -1,6 +1,6 @@
 name: Sentry Release
 
-on: 
+on:
   push:
     branches:
       - 'develop'
