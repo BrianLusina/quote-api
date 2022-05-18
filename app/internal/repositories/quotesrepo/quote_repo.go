@@ -5,7 +5,6 @@ import (
 	"quote/api/app/internal/repositories/models"
 	"quote/api/app/pkg/identifier"
 	"quote/api/app/tools/logger"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -30,8 +29,6 @@ func (q *QuotesRepo) Save(quote entity.Quote) (entity.Quote, error) {
 		Author: quote.Author,
 		BaseModel: models.BaseModel{
 			Identifier: quote.ID.String(),
-			CreatedAt:  time.Now(),
-			UpdatedAt:  time.Now(),
 		},
 	}
 
@@ -46,14 +43,13 @@ func (q *QuotesRepo) Save(quote entity.Quote) (entity.Quote, error) {
 
 func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 	var quotes []models.Quote
-	result := q.db.Find(&quotes)
 
-	if result.Error != nil {
-		q.log.Errorf("Error quering all quotes: %v", result.Error)
-		return nil, result.Error
+	if err := q.db.Find(&quotes).Error; err != nil {
+		q.log.Errorf("Error quering all quotes: %v", err)
+		return nil, err
 	}
 
-	var allQuotes []entity.Quote
+	allQuotes := []entity.Quote{}
 	for _, quote := range quotes {
 		allQuotes = append(allQuotes, entity.Quote{
 			ID:     identifier.New().FromString(quote.Identifier),
@@ -65,6 +61,7 @@ func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 			},
 		})
 	}
+
 	return allQuotes, nil
 }
 

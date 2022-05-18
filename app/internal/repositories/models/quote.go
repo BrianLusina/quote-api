@@ -5,3 +5,7 @@ type Quote struct {
 	Quote  string `gorm:"column:quote;uniqueIndex:idx_quote"`
 	Author string `gorm:"column:author;index:idx_author"`
 }
+
+func (Quote) TableName() string {
+	return "quotes"
+}

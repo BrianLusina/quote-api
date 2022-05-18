@@ -9,7 +9,7 @@ import (
 )
 
 func NewCORSMiddleware(cors config.CorsConfig) Middleware {
-	log := logger.NewLogger("log-cors")
+	log := logger.NewLogger("cors-log")
 	return func(context *gin.Context) {
 		log.Warnf("CORS Header is enabled & set to: %s", cors.AllowedOrigins)
 		context.Header("Access-Control-Allow-Origin", cors.AllowedOrigins)
