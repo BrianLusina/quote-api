@@ -28,9 +28,9 @@ jobs:
       - name: Upload Test Coverage
         uses: codecov/codecov-action@v2
 
-      # Ref: https://github.com/codacy/codacy-coverage-reporter-action
+      # Ref: https://docs.codacy.com/coverage-reporter/#submitting-coverage-for-golang
       - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.out
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        run: |
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r coverage.out
