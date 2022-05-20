@@ -13,7 +13,7 @@ func NewCORSMiddleware(cors config.CorsConfig) Middleware {
 	return func(context *gin.Context) {
 		log.Warnf("CORS Header is enabled & set to: %s", cors.AllowedOrigins)
 		context.Header("Access-Control-Allow-Origin", cors.AllowedOrigins)
-		context.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Registry-Auth, Authorization")
+		context.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 		context.Header("Access-Control-Allow-Methods", "HEAD, GET, POST, DELETE, PUT, OPTIONS")
 	}
 }
