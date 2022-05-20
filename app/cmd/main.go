@@ -37,6 +37,8 @@ const (
 	EnvCacheDb          = "CACHE_DB"
 	EnvCacheUsername    = "CACHE_USERNAME"
 	EnvCachePassword    = "CACHE_PASSWORD"
+	EnvUsername         = "USERNAME"
+	EnvPassword         = "PASSWORD"
 )
 
 func main() {
@@ -64,6 +66,9 @@ func main() {
 	cachePort := tools.EnvOr(EnvCachePort, "6379")
 	cacheUsername := tools.EnvOr(EnvCacheUsername, "quotesUser")
 	cachePassword := tools.EnvOr(EnvCachePassword, "quotesPass")
+	username := tools.EnvOr(EnvUsername, "admin")
+	password := tools.EnvOr(EnvPassword, "admin")
+	allowedOrigins := tools.EnvOr("ALLOWED_ORIGINS", "*")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -76,6 +81,9 @@ func main() {
 		Logging: config.LoggingConfig{
 			Level:            logLevel,
 			EnableJSONOutput: enableJsonOutput,
+		},
+		Cors: config.CorsConfig{
+			AllowedOrigins: allowedOrigins,
 		},
 		Database: config.DatabaseConfig{
 			Host:     host,
@@ -96,6 +104,10 @@ func main() {
 			Username: cacheUsername,
 			Password: cachePassword,
 		},
+		Auth: config.AuthConfig{
+			Username: username,
+			Password: password,
+		},
 	}
 
 	cache := cache.New(ctx, configuration.Cache)
@@ -105,16 +117,18 @@ func main() {
 	srv := server.NewServer(&configuration)
 
 	// middlewares for the server
-	corsMiddleware := middleware.NewCORSMiddleware(configuration.CorsHeaders)
+	corsMiddleware := middleware.NewCORSMiddleware(configuration.Cors)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
+	authMiddleware := middleware.NewAuthenticationMiddleware(configuration.Auth)
 
 	// use middlewares
 	srv.UseMiddleware(recoveryMiddleware)
 	srv.UseMiddleware(monitoringMiddleware)
 	srv.UseMiddleware(loggingMiddleware)
 	srv.UseMiddleware(corsMiddleware)
+	srv.UseMiddleware(authMiddleware)
 
 	repository := repositories.NewRepository(configuration.Database)
 	quotesService := domain.NewQuotesUseCase(repository.GetQuotesRepo())

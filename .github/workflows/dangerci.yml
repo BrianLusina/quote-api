@@ -13,10 +13,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         node-version: [16.x]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -36,16 +35,15 @@ jobs:
       with:
         path: |
           **/node_modules
-          **/.eslintcache
-          ${{ steps.cache-dir-path.outputs.dir }}          
+          ${{ steps.cache-dir-path.outputs.dir }}
         key: ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'    
-      run: yarn install
-    
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: yarn add danger
+
     - name: Danger CI Check
       uses: danger/danger-js@9.1.8
       env:

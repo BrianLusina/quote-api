@@ -1,6 +1,13 @@
 # Quote API
 
+[![License](https://img.shields.io/github/license/brianlusina/quote-api)](https://github.com/brianlusina/quote-api/blob/main/LICENSE)
+[![Version](https://img.shields.io/github/v/release/brianlusina/quote-api?color=%235351FB&label=version)](https://github.com/brianlusina/quote-api/releases)
+[![Tests](https://github.com/BrianLusina/quote-api/actions/workflows/tests.yml/badge.svg)](https://github.com/BrianLusina/quote-api/actions/workflows/tests.yml)
+[![Lint](https://github.com/BrianLusina/quote-api/actions/workflows/lint.yml/badge.svg)](https://github.com/BrianLusina/quote-api/actions/workflows/lint.yml)
+[![Build](https://github.com/BrianLusina/quote-api/actions/workflows/build_app.yml/badge.svg)](https://github.com/BrianLusina/quote-api/actions/workflows/build_app.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/3c7f8e37c31646a5ae7b17cf1682551b)](https://www.codacy.com/gh/BrianLusina/quote-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=BrianLusina/quote-api&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/BrianLusina/quote-api/branch/main/graph/badge.svg?token=RNg0UoESug)](https://codecov.io/gh/BrianLusina/quote-api)
+[![Go](https://img.shields.io/badge/Go-1.18-blue.svg)](https://go.dev/)
 
 Simple API to fetch quotes and add quotes.
 

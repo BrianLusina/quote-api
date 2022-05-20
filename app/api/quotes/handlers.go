@@ -40,7 +40,7 @@ func (hdl *quotesRouter) getQuote(ctx *gin.Context) {
 	quote, err := hdl.svc.GetQuote(id)
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -61,7 +61,7 @@ func (hdl *quotesRouter) getAllQuotes(ctx *gin.Context) {
 	quotes, err := hdl.svc.GetAllQuotes()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -85,7 +85,7 @@ func (hdl *quotesRouter) getRandomQuote(ctx *gin.Context) {
 	quote, err := hdl.svc.GetRandomQuote()
 
 	if err != nil {
-		ctx.AbortWithStatusJSON(500, gin.H{"message": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
