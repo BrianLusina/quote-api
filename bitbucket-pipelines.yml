@@ -40,5 +40,5 @@ pipelines:
       - step:
           name: Release
           image: node:16.13.0
-          script: 
+          script:
             - npx semantic-release
