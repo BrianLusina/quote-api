@@ -1,7 +1,7 @@
 package quotesrepo
 
 import (
-	"quote/api/app/internal/core/domain/entity"
+	"quote/api/app/internal/core/domain/entities"
 	"quote/api/app/internal/repositories/models"
 	"quote/api/app/pkg/identifier"
 	"quote/api/app/tools/logger"
@@ -23,7 +23,7 @@ func NewQuotesRepo(db *gorm.DB) *QuotesRepo {
 	}
 }
 
-func (q *QuotesRepo) Save(quote entity.Quote) (entity.Quote, error) {
+func (q *QuotesRepo) Save(quote entities.Quote) (entities.Quote, error) {
 	newQuote := models.Quote{
 		Quote:  quote.Quote,
 		Author: quote.Author,
@@ -36,12 +36,12 @@ func (q *QuotesRepo) Save(quote entity.Quote) (entity.Quote, error) {
 
 	if result.Error != nil {
 		q.log.Errorf("Error saving quote: %v", result.Error)
-		return entity.Quote{}, result.Error
+		return entities.Quote{}, result.Error
 	}
 	return quote, nil
 }
 
-func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
+func (q *QuotesRepo) GetAllQuotes() ([]entities.Quote, error) {
 	var quotes []models.Quote
 
 	if err := q.db.Find(&quotes).Error; err != nil {
@@ -49,13 +49,13 @@ func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 		return nil, err
 	}
 
-	allQuotes := []entity.Quote{}
+	allQuotes := []entities.Quote{}
 	for _, quote := range quotes {
-		allQuotes = append(allQuotes, entity.Quote{
+		allQuotes = append(allQuotes, entities.Quote{
 			ID:     identifier.New().FromString(quote.Identifier),
 			Quote:  quote.Quote,
 			Author: quote.Author,
-			BaseEntity: entity.BaseEntity{
+			BaseEntity: entities.BaseEntity{
 				CreatedAt: quote.CreatedAt,
 				UpdatedAt: quote.UpdatedAt,
 			},
@@ -65,27 +65,27 @@ func (q *QuotesRepo) GetAllQuotes() ([]entity.Quote, error) {
 	return allQuotes, nil
 }
 
-func (q *QuotesRepo) GetQuote(id string) (entity.Quote, error) {
+func (q *QuotesRepo) GetQuote(id string) (entities.Quote, error) {
 	var quote models.Quote
 	result := q.db.Where(&models.Quote{BaseModel: models.BaseModel{Identifier: id}}).First(&quote)
 
 	if result.Error != nil {
 		q.log.Errorf("Error quering quote: %v", result.Error)
-		return entity.Quote{}, result.Error
+		return entities.Quote{}, result.Error
 	}
 
-	return entity.Quote{
+	return entities.Quote{
 		ID:     identifier.New().FromString(quote.Identifier),
 		Quote:  quote.Quote,
 		Author: quote.Author,
-		BaseEntity: entity.BaseEntity{
+		BaseEntity: entities.BaseEntity{
 			CreatedAt: quote.CreatedAt,
 			UpdatedAt: quote.UpdatedAt,
 		},
 	}, nil
 }
 
-func (q *QuotesRepo) UpdateQuote(quote entity.Quote) (entity.Quote, error) {
+func (q *QuotesRepo) UpdateQuote(quote entities.Quote) (entities.Quote, error) {
 	panic("implement me")
 
 }

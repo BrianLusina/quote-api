@@ -1,4 +1,4 @@
-package entity
+package entities
 
 import (
 	"quote/api/app/internal/errdefs"
@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Quote is a quote entity
 type Quote struct {
 	identifier.ID
 	Author string
@@ -13,6 +14,7 @@ type Quote struct {
 	BaseEntity
 }
 
+// NewQuote returns a new quote entity or an error
 func NewQuote(author, quote string) (*Quote, error) {
 	if len(quote) == 0 {
 		return nil, errdefs.ErrInvalidQuote
