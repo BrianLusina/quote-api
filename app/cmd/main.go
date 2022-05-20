@@ -30,6 +30,8 @@ const (
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
 	EnvSentryDsn        = "SENTRY_DSN"
+	EnvUsername         = "USERNAME"
+	EnvPassword         = "PASSWORD"
 )
 
 func main() {
@@ -50,6 +52,9 @@ func main() {
 	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
+	username := tools.EnvOr(EnvUsername, "admin")
+	password := tools.EnvOr(EnvPassword, "admin")
+	allowedOrigins := tools.EnvOr("ALLOWED_ORIGINS", "*")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -63,6 +68,9 @@ func main() {
 			Level:            logLevel,
 			EnableJSONOutput: enableJsonOutput,
 		},
+		Cors: config.CorsConfig{
+			AllowedOrigins: allowedOrigins,
+		},
 		Database: config.DatabaseConfig{
 			Host:     host,
 			Database: database,
@@ -75,6 +83,10 @@ func main() {
 				Dsn: sentryDsn,
 			},
 		},
+		Auth: config.AuthConfig{
+			Username: username,
+			Password: password,
+		},
 	}
 
 	monitoring.InitializeMonitoring(configuration.Monitoring)
@@ -82,16 +94,18 @@ func main() {
 	srv := server.NewServer(&configuration)
 
 	// middlewares for the server
-	corsMiddleware := middleware.NewCORSMiddleware(configuration.CorsHeaders)
+	corsMiddleware := middleware.NewCORSMiddleware(configuration.Cors)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
+	authMiddleware := middleware.NewAuthenticationMiddleware(configuration.Auth)
 
 	// use middlewares
 	srv.UseMiddleware(recoveryMiddleware)
 	srv.UseMiddleware(monitoringMiddleware)
 	srv.UseMiddleware(loggingMiddleware)
 	srv.UseMiddleware(corsMiddleware)
+	srv.UseMiddleware(authMiddleware)
 
 	repository := repositories.NewRepository(configuration.Database)
 	quotesService := domain.NewQuotesUseCase(repository.GetQuotesRepo())

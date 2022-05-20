@@ -6,8 +6,15 @@ name: Slack Notification
 on:
   workflow_run:
     workflows:
-      - "Lint, Test & Build"
-      - "Build Docker Image"
+      - "Lint"
+      - "Test"
+      - "Build"
+      - "Release"
+      - "Sentry Release"
+      - "Docker"
+      - "CodeQL"
+      - "Gitlab RepoSync"
+      - "BitBucket RepoSync"
     types:
       - completed
 

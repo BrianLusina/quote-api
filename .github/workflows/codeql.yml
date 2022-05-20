@@ -1,5 +1,5 @@
 # reference https://github.com/github/codeql-action
-name: "Code Scanning"
+name: "CodeQL"
 
 on:
   push:

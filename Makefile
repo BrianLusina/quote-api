@@ -37,7 +37,7 @@ setup: setup-linting setup-hadolint setup-trivy
 
 # Will setup linting tools
 setup-linting:
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./bin v1.45.2
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./bin v1.46.2
 	chmod +x ./bin/golangci-lint
 
 setup-trivy:
@@ -59,7 +59,7 @@ test:
 	go test ./...
 
 test-coverage:
-	go test -tags testing -v -cover -covermode=atomic ./...
+	go test -tags testing -v -cover -covermode=atomic -coverprofile=coverage.out ./...
 
 fmt: ## gofmt and goimports all go files
 	find . -name '*.go' -not -wholename './vendor/*' | while read -r file; do gofmt -w -s "$$file"; goimports -w "$$file"; done
