@@ -6,8 +6,6 @@ on:
       - "Tests"
     types:
       - completed
-  pull_request:
-  push:
 
 jobs:
 
