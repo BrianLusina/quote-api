@@ -8,7 +8,7 @@ on:
       - completed
   pull_request:
   push:
-  
+
 jobs:
 
   build:
