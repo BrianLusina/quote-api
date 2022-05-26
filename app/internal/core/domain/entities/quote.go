@@ -1,9 +1,8 @@
 package entities
 
 import (
-	"quote/api/app/internal/errdefs"
+	"fmt"
 	"quote/api/app/pkg/identifier"
-	"strings"
 )
 
 // Quote is a quote entity
@@ -16,17 +15,21 @@ type Quote struct {
 
 // NewQuote returns a new quote entity or an error
 func NewQuote(author, quote string) (*Quote, error) {
-	if len(quote) == 0 {
-		return nil, errdefs.ErrInvalidQuote
+	if saying, err := newSaying(quote); err != nil {
+		return nil, err
+	} else {
+		quoteValue := fmt.Sprintf("%s", saying)
+		quote = quoteValue
+	}
+
+	if quoteAuthor, err := newAuthor(author); err != nil {
+		return nil, err
+	} else {
+		authorValue := fmt.Sprintf("%s", quoteAuthor)
+		author = authorValue
 	}
 
 	id := identifier.New()
-
-	if author == "" {
-		author = "Unknown"
-	}
-
-	author = strings.Trim(author, " ")
 
 	return &Quote{
 		ID:         id,
