@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"fmt"
 	"quote/api/app/internal/errdefs"
 	"quote/api/app/tools"
 	"regexp"
@@ -38,5 +37,5 @@ func newSaying(value string) (*saying, error) {
 
 // String returns the author type as a string
 func (s *saying) String() string {
-	return fmt.Sprintf("%s", s.value)
+	return s.value
 }

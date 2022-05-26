@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"fmt"
 	"quote/api/app/pkg/identifier"
 )
 
@@ -18,15 +17,13 @@ func NewQuote(author, quote string) (*Quote, error) {
 	if saying, err := newSaying(quote); err != nil {
 		return nil, err
 	} else {
-		quoteValue := fmt.Sprintf("%s", saying)
-		quote = quoteValue
+		quote = saying.String()
 	}
 
 	if quoteAuthor, err := newAuthor(author); err != nil {
 		return nil, err
 	} else {
-		authorValue := fmt.Sprintf("%s", quoteAuthor)
-		author = authorValue
+		author = quoteAuthor.String()
 	}
 
 	id := identifier.New()

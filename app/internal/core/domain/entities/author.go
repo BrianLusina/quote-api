@@ -1,9 +1,11 @@
 package entities
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -23,7 +25,8 @@ func newAuthor(value string) (*author, error) {
 	if len(matches) == 0 {
 		value = "Unknown"
 	} else {
-		value = strings.Title(strings.Join(matches, " "))
+		caser := cases.Title(language.English)
+		value = caser.String(strings.Join(matches, " "))
 	}
 
 	return &author{value: value}, nil
@@ -31,5 +34,5 @@ func newAuthor(value string) (*author, error) {
 
 // String returns the author type as a string
 func (a *author) String() string {
-	return fmt.Sprintf("%s", a.value)
+	return a.value
 }
