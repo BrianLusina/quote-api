@@ -13,7 +13,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/text v0.3.7
-	gorm.io/driver/postgres v1.3.6
+	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.5
 )
 
