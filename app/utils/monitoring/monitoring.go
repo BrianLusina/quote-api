@@ -4,4 +4,5 @@ package monitoring
 type Monitoring interface {
 	CaptureException(err error)
 	CaptureMessage(message string)
+	Recover()
 }
