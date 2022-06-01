@@ -2,22 +2,29 @@ package monitoring
 
 import (
 	"log"
+	"quote/api/app/config"
 
 	"github.com/getsentry/sentry-go"
 )
 
+// Sentry is a wrapper for the Sentry client.
 type Sentry struct {
 	Dsn string
 }
 
-func NewSentry(dsn string) *Sentry {
+// NewSentry creates a new Sentry client.
+func NewSentry(config config.Monitoring) *Sentry {
+	dsn := config.Dsn
+
 	err := sentry.Init(sentry.ClientOptions{
 		Dsn:              dsn,
 		AttachStacktrace: true,
 	})
+
 	if err != nil {
 		log.Fatalf("sentry.Init: %s", err)
 	}
+
 	return &Sentry{Dsn: dsn}
 }
 

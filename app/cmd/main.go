@@ -111,16 +111,14 @@ func main() {
 	}
 
 	cache := cache.New(ctx, configuration.Cache)
-
-	monitoring.InitializeMonitoring(configuration.Monitoring)
+	sentryClient := monitoring.NewSentry(configuration.Monitoring)
 
 	srv := server.NewServer(&configuration)
 
-	// middlewares for the server
 	corsMiddleware := middleware.NewCORSMiddleware(configuration.Cors)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
-	monitoringMiddleware := middleware.NewMonitoringMiddleware()
+	monitoringMiddleware := middleware.NewMonitoringMiddleware(sentryClient)
 	authMiddleware := middleware.NewAuthenticationMiddleware(configuration.Auth)
 
 	// use middlewares

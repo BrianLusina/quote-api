@@ -1,12 +1,7 @@
 package monitoring
 
-import "quote/api/app/config"
-
+// Monitoring is an interface for monitoring clients to implement
 type Monitoring interface {
 	CaptureException(err error)
 	CaptureMessage(message string)
-}
-
-func InitializeMonitoring(config config.Monitoring) {
-	NewSentry(config.Sentry.Dsn)
 }
