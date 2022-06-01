@@ -2,7 +2,7 @@
 name: Docker
 
 on:
-  # Runs this workflow only after the Lint, Test & Build Workflow has completed
+  # Runs this workflow only after the Build Workflow has completed
   workflow_run:
     workflows:
       - "Build"
