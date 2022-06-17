@@ -20,7 +20,7 @@ type repository struct {
 }
 
 func NewRepository(config config.DatabaseConfig) *repository {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", config.Host, config.User, config.Password, config.Database, config.Port)
+	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", config.User, config.Password, config.Host, config.Port, config.Database)
 
 	dbLogger := dblogger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),

@@ -1,21 +1,21 @@
-package domain
+package quotesvc
 
 import (
 	"math/rand"
 	"quote/api/app/internal/core"
-	"quote/api/app/internal/core/domain/entities"
+	"quote/api/app/internal/core/entities"
 	"time"
 )
 
-type QuotesUseCase struct {
+type QuoteSvc struct {
 	quoteRepo core.QuoteRepository
 }
 
-func NewQuotesUseCase(quoteRepo core.QuoteRepository) *QuotesUseCase {
-	return &QuotesUseCase{quoteRepo: quoteRepo}
+func NewQuoteSvc(quoteRepo core.QuoteRepository) *QuoteSvc {
+	return &QuoteSvc{quoteRepo: quoteRepo}
 }
 
-func (q *QuotesUseCase) CreateQuote(author, quote string) (*entities.Quote, error) {
+func (q *QuoteSvc) CreateQuote(author, quote string) (*entities.Quote, error) {
 	newQuote, err := entities.NewQuote(author, quote)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (q *QuotesUseCase) CreateQuote(author, quote string) (*entities.Quote, erro
 	return newQuote, nil
 }
 
-func (q *QuotesUseCase) GetAllQuotes() ([]entities.Quote, error) {
+func (q *QuoteSvc) GetAllQuotes() ([]entities.Quote, error) {
 	allQuotes, err := q.quoteRepo.GetAllQuotes()
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (q *QuotesUseCase) GetAllQuotes() ([]entities.Quote, error) {
 	return allQuotes, nil
 }
 
-func (q *QuotesUseCase) GetQuote(id string) (entities.Quote, error) {
+func (q *QuoteSvc) GetQuote(id string) (entities.Quote, error) {
 	quote, err := q.quoteRepo.GetQuote(id)
 	if err != nil {
 		return entities.Quote{}, err
@@ -44,7 +44,7 @@ func (q *QuotesUseCase) GetQuote(id string) (entities.Quote, error) {
 	return quote, nil
 }
 
-func (q *QuotesUseCase) GetRandomQuote() (entities.Quote, error) {
+func (q *QuoteSvc) GetRandomQuote() (entities.Quote, error) {
 	quotes, err := q.quoteRepo.GetAllQuotes()
 	if err != nil {
 		return entities.Quote{}, err

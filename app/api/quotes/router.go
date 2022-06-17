@@ -1,20 +1,20 @@
 package quotes
 
 import (
-	"quote/api/app/internal/core/domain"
+	"quote/api/app/internal/core/services/quotesvc"
 	"quote/api/app/server/router"
 	"quote/api/app/utils/cache"
 )
 
 // quoteHandler is a router for quotes handler
 type quotesRouter struct {
-	svc    *domain.QuotesUseCase
+	svc    *quotesvc.QuoteSvc
 	cache  *cache.Cache
 	routes []router.Route
 }
 
 // NewQuoteHandler initializes a new router
-func NewQuotesRouter(cache *cache.Cache, svc *domain.QuotesUseCase) router.Router {
+func NewQuotesRouter(cache *cache.Cache, svc *quotesvc.QuoteSvc) router.Router {
 	r := &quotesRouter{
 		cache: cache,
 		svc:   svc,

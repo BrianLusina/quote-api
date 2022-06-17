@@ -1,7 +1,7 @@
 package quotesrepo
 
 import (
-	"quote/api/app/internal/core/domain/entities"
+	"quote/api/app/internal/core/entities"
 	"quote/api/app/internal/repositories/models"
 	"quote/api/app/pkg/identifier"
 	"quote/api/app/tools/logger"

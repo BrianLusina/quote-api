@@ -1,7 +1,7 @@
 package core
 
 import (
-	"quote/api/app/internal/core/domain/entities"
+	"quote/api/app/internal/core/entities"
 )
 
 type QuoteRepository interface {

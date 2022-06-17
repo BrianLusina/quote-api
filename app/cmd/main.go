@@ -6,7 +6,7 @@ import (
 	"quote/api/app/api/health"
 	"quote/api/app/api/quotes"
 	"quote/api/app/config"
-	"quote/api/app/internal/core/domain"
+	"quote/api/app/internal/core/services/quotesvc"
 	"quote/api/app/internal/repositories"
 	"quote/api/app/server"
 	"quote/api/app/server/middleware"
@@ -134,7 +134,7 @@ func main() {
 	srv.UseMiddleware(authMiddleware)
 
 	repository := repositories.NewRepository(configuration.Database)
-	quotesService := domain.NewQuotesUseCase(repository.GetQuotesRepo())
+	quotesService := quotesvc.NewQuoteSvc(repository.GetQuotesRepo())
 
 	// setup routers
 	routers := []router.Router{
