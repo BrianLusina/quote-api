@@ -56,8 +56,8 @@ func (q *QuotesRepo) GetAllQuotes() ([]entities.Quote, error) {
 			Quote:  quote.Quote,
 			Author: quote.Author,
 			BaseEntity: entities.BaseEntity{
-				CreatedAt: quote.CreatedAt,
-				UpdatedAt: quote.UpdatedAt,
+				CreatedAt: quote.BaseModel.CreatedAt,
+				UpdatedAt: quote.BaseModel.UpdatedAt,
 			},
 		})
 	}
@@ -79,8 +79,8 @@ func (q *QuotesRepo) GetQuote(id string) (entities.Quote, error) {
 		Quote:  quote.Quote,
 		Author: quote.Author,
 		BaseEntity: entities.BaseEntity{
-			CreatedAt: quote.CreatedAt,
-			UpdatedAt: quote.UpdatedAt,
+			CreatedAt: quote.BaseModel.CreatedAt,
+			UpdatedAt: quote.BaseModel.UpdatedAt,
 		},
 	}, nil
 }

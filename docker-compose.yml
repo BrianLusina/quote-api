@@ -32,8 +32,8 @@ services:
     container_name: quotes-db1
     hostname: db1
     environment:
-      COCKROACH_USER: quotes-user
-      COCKROACH_PASSWORD: quotes-pass
+      COCKROACH_USER: quotesUser
+      COCKROACH_PASSWORD: quotesPass
     ports:
       - 26257:26257
       - 8080:8080
@@ -47,8 +47,8 @@ services:
     hostname: db2
     command: start --insecure --join=db1,db2,db3
     environment:
-      COCKROACH_USER: quotes-user
-      COCKROACH_PASSWORD: quotes-pass
+      COCKROACH_USER: quotesUser
+      COCKROACH_PASSWORD: quotesPass
     volumes:
       - db2:/cockroach/cockroach-data
 
@@ -58,8 +58,8 @@ services:
     hostname: db3
     command: start --insecure --join=db1,db2,db3
     environment:
-      COCKROACH_USER: quotes-user
-      COCKROACH_PASSWORD: quotes-pass
+      COCKROACH_USER: quotesUser
+      COCKROACH_PASSWORD: quotesPass
     volumes:
       - db3:/cockroach/cockroach-data
 
