@@ -85,7 +85,12 @@ func main() {
 			EnableJSONOutput: enableJsonOutput,
 		},
 		Cors: config.CorsConfig{
-			AllowedOrigins: allowedOrigins,
+			AllowedOrigins:   allowedOrigins,
+			AllowedMethods:   "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS",
+			AllowedHeaders:   "Origin,X-Requested-With,Content-Type,Accept,Authorization",
+			MaxAge:           "86400",
+			ExposedHeaders:   "",
+			AllowCredentials: "true",
 		},
 		Database: config.DatabaseConfig{
 			Host:     host,

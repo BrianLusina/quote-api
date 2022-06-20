@@ -1,5 +1,10 @@
 package config
 
 type CorsConfig struct {
-	AllowedOrigins string
+	AllowedOrigins   string
+	AllowedMethods   string
+	AllowedHeaders   string
+	AllowCredentials string
+	MaxAge           string
+	ExposedHeaders   string
 }
