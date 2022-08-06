@@ -30,8 +30,8 @@ jobs:
           flyctl secrets set DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
           flyctl secrets set DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD}}
           flyctl secrets set DATABASE_PORT=${{ secrets.DATABASE_PORT }}
-          flyctl secrets set DATABASE_SSL_MODE={{ secrets.DATABASE_SSL_MODE }}
-          flyctl secrets set DATABASE_OPTIONS={{ secrets.DATABASE_OPTIONS }}
+          flyctl secrets set DATABASE_SSL_MODE=${{ secrets.DATABASE_SSL_MODE }}
+          flyctl secrets set DATABASE_OPTIONS=${{ secrets.DATABASE_OPTIONS }}
           flyctl secrets set USERNAME=${{ secrets.USERNAME }}
           flyctl secrets set PASSWORD=${{ secrets.PASSWORD }}
           flyctl secrets set SENTRY_DSN=${{ secrets.SENTRY_DSN }}
