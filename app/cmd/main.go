@@ -31,7 +31,8 @@ const (
 	EnvDatabaseUsername = "DATABASE_USERNAME"
 	EnvDatabasePassword = "DATABASE_PASSWORD"
 	EnvDatabasePort     = "DATABASE_PORT"
-	EnvDatabaseSSLMode  = "DATABASE_SSLMODE"
+	EnvDatabaseSSLMode  = "DATABASE_SSL_MODE"
+	EnvDatabaseOptions  = "DATABASE_OPTIONS"
 	EnvSentryDsn        = "SENTRY_DSN"
 	EnvCacheHost        = "CACHE_HOST"
 	EnvCachePort        = "CACHE_PORT"
@@ -62,6 +63,7 @@ func main() {
 	databasePass := tools.EnvOr(EnvDatabasePassword, "quotesPass")
 	databasePort := tools.EnvOr(EnvDatabasePort, "5432")
 	databaseSslMode := tools.EnvOr(EnvDatabaseSSLMode, "disable")
+	databaseOptions := tools.EnvOr(EnvDatabaseOptions, "")
 	sentryDsn := tools.EnvOr(EnvSentryDsn, "")
 	cacheHost := tools.EnvOr(EnvCacheHost, "localhost")
 	cacheDb := tools.EnvOr(EnvCacheDb, "0")
@@ -99,6 +101,7 @@ func main() {
 			Password: databasePass,
 			Port:     databasePort,
 			SSLMode:  databaseSslMode,
+			Options:  databaseOptions,
 		},
 		Monitoring: config.Monitoring{
 			Sentry: config.Sentry{

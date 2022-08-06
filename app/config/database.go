@@ -7,4 +7,5 @@ type DatabaseConfig struct {
 	Password string
 	Port     string
 	SSLMode  string
+	Options  string
 }
