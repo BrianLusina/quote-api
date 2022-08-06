@@ -19,10 +19,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Ref: https://github.com/marketplace/actions/deploy-to-heroku
-      - uses: akhileshns/heroku-deploy@v3.12.12 
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          usedocker: true
+      # https://github.com/superfly/flyctl-actions
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: 
+          flyctl secrets set ENV=${{ secrets.ENV }}
+          flyctl secrets set LOG_LEVEL=${{ secrets.LOG_LEVEL }}
+          flyctl secrets set PORT=${{ secrets.PORT }}
+          flyctl secrets set DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+          flyctl secrets set DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+          flyctl secrets set DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
+          flyctl secrets set DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD}}
+          flyctl secrets set DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+          flyctl secrets set USERNAME=${{ secrets.USERNAME }}
+          flyctl secrets set PASSWORD=${{ secrets.PASSWORD }}
+          flyctl secrets set SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+          flyctl secrets set SENTRY_ENV=${{ secrets.SENTRY_ENV }}
+          flyctl secrets set SENTRY_SAMPLE_RATE=${{ secrets.SENTRY_SAMPLE_RATE }}
+          flyctl secrets set SENTRY_ENABLED=${{ secrets.SENTRY_ENABLED }}
+          flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
