@@ -21,7 +21,7 @@ jobs:
 
       # https://github.com/superfly/flyctl-actions
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: 
+      - run: |
           flyctl secrets set ENV=${{ secrets.ENV }}
           flyctl secrets set LOG_LEVEL=${{ secrets.LOG_LEVEL }}
           flyctl secrets set PORT=${{ secrets.PORT }}
