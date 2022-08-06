@@ -1,7 +1,6 @@
-# fly.toml file generated for curtz on 2022-07-11T07:26:01+03:00
-# Ref: https://fly.io/docs/reference/configuration/
+# fly.toml file generated for dicensapi on 2022-08-06T22:22:21+03:00
 
-app = "quote-api"
+app = "dicensapi"
 
 [deploy]
   strategy = "bluegreen"
