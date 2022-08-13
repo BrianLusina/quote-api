@@ -26,6 +26,7 @@ const (
 	EnvLogLevel         = "LOG_LEVEL"
 	EnvLogJsonOutput    = "LOG_JSON_OUTPUT"
 	EnvPort             = "PORT"
+	EnvDatabaseUrl      = "DATABASE_URL"
 	EnvDatabaseHost     = "DATABASE_HOST"
 	EnvDatabase         = "DATABASE_NAME"
 	EnvDatabaseUsername = "DATABASE_USERNAME"
@@ -41,6 +42,12 @@ const (
 	EnvCachePassword    = "CACHE_PASSWORD"
 	EnvUsername         = "USERNAME"
 	EnvPassword         = "PASSWORD"
+	EnvAllowedOrigins   = "ALLOWED_ORIGINS"
+	EnvAllowedMethods   = "ALLOWED_METHODS"
+	EnvAllowedHeaders   = "ALLOWED_HEADERS"
+	EnvMaxAge           = "MAX_AGE"
+	EnvExposedHeaders   = "EXPOSED_HEADERS"
+	EnvAllowCredentials = "ALLOW_CREDENTIALS"
 )
 
 func main() {
@@ -50,13 +57,14 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Warn("Error loading .env file. Using defaults")
+		log.Debug("Error loading .env file. Using defaults")
 	}
 
 	environment := tools.EnvOr(Env, "development")
 	logLevel := tools.EnvOr(EnvLogLevel, "debug")
 	logJsonOutput := tools.EnvOr(EnvLogJsonOutput, "true")
 	port := tools.EnvOr(EnvPort, "8080")
+	databaseUrl := tools.EnvOr(EnvDatabaseUrl, "")
 	host := tools.EnvOr(EnvDatabaseHost, "localhost")
 	database := tools.EnvOr(EnvDatabase, "quotesdb")
 	databaseUser := tools.EnvOr(EnvDatabaseUsername, "quotesUser")
@@ -72,7 +80,12 @@ func main() {
 	cachePassword := tools.EnvOr(EnvCachePassword, "quotesPass")
 	username := tools.EnvOr(EnvUsername, "admin")
 	password := tools.EnvOr(EnvPassword, "admin")
-	allowedOrigins := tools.EnvOr("ALLOWED_ORIGINS", "*")
+	allowedOrigins := tools.EnvOr(EnvAllowedOrigins, "*")
+	allowedMethods := tools.EnvOr(EnvAllowedMethods, "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS")
+	allowedHeaders := tools.EnvOr(EnvAllowedHeaders, "Origin,X-Requested-With,Content-Type,Accept,Authorization")
+	maxAge := tools.EnvOr(EnvMaxAge, "86400")
+	exposedHeaders := tools.EnvOr(EnvExposedHeaders, "")
+	allowCredentials := tools.EnvOr(EnvAllowCredentials, "true")
 
 	enableJsonOutput, err := strconv.ParseBool(logJsonOutput)
 	if err != nil {
@@ -88,13 +101,14 @@ func main() {
 		},
 		Cors: config.CorsConfig{
 			AllowedOrigins:   allowedOrigins,
-			AllowedMethods:   "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS",
-			AllowedHeaders:   "Origin,X-Requested-With,Content-Type,Accept,Authorization",
-			MaxAge:           "86400",
-			ExposedHeaders:   "",
-			AllowCredentials: "true",
+			AllowedMethods:   allowedMethods,
+			AllowedHeaders:   allowedHeaders,
+			MaxAge:           maxAge,
+			ExposedHeaders:   exposedHeaders,
+			AllowCredentials: allowCredentials,
 		},
 		Database: config.DatabaseConfig{
+			URL:      databaseUrl,
 			Host:     host,
 			Database: database,
 			User:     databaseUser,
@@ -127,14 +141,12 @@ func main() {
 
 	srv := server.NewServer(&configuration)
 
-	// middlewares for the server
 	corsMiddleware := middleware.NewCORSMiddleware(configuration.Cors)
 	loggingMiddleware := middleware.NewLoggingMiddleware(configuration.Logging)
 	recoveryMiddleware := middleware.NewRecoveryMiddleware()
 	monitoringMiddleware := middleware.NewMonitoringMiddleware()
 	authMiddleware := middleware.NewAuthenticationMiddleware(configuration.Auth)
 
-	// use middlewares
 	srv.UseMiddleware(recoveryMiddleware)
 	srv.UseMiddleware(monitoringMiddleware)
 	srv.UseMiddleware(loggingMiddleware)
@@ -144,7 +156,6 @@ func main() {
 	repository := repositories.NewRepository(configuration.Database)
 	quotesService := quotesvc.NewQuoteSvc(repository.GetQuotesRepo())
 
-	// setup routers
 	routers := []router.Router{
 		quotes.NewQuotesRouter(cache, quotesService),
 		health.NewHealthRouter(),

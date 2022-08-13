@@ -4,8 +4,13 @@ import (
 	"net/http"
 	"quote/api/app/config"
 	"quote/api/app/tools/logger"
+	"regexp"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	healthRegex = regexp.MustCompile("^(/health)$")
 )
 
 // NewAuthenticationMiddleware returns a middleware that will check if the user is authenticated
@@ -13,6 +18,15 @@ func NewAuthenticationMiddleware(config config.AuthConfig) Middleware {
 	log := logger.NewLogger("auth-log")
 	return func(ctx *gin.Context) {
 		username, password, hasAuth := ctx.Request.BasicAuth()
+
+		requestUrl := ctx.Request.URL
+
+		requestPath := requestUrl.Path
+
+		if healthRegex.MatchString(requestPath) {
+			ctx.Next()
+			return
+		}
 
 		if hasAuth {
 			if username == config.Username && password == config.Password {

@@ -20,13 +20,18 @@ type repository struct {
 }
 
 func NewRepository(config config.DatabaseConfig) *repository {
-	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s&options=%s", config.User, config.Password, config.Host, config.Port, config.Database, config.SSLMode, config.Options)
+	var dsn string
+	if config.URL != "" {
+		dsn = config.URL
+	} else {
+		dsn = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s&options=%s", config.User, config.Password, config.Host, config.Port, config.Database, config.SSLMode, config.Options)
+	}
 
 	dbLogger := dblogger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		dblogger.Config{
 			SlowThreshold:             time.Second,
-			LogLevel:                  dblogger.Info,
+			LogLevel:                  dblogger.Warn,
 			IgnoreRecordNotFoundError: false,
 			Colorful:                  true,
 		},

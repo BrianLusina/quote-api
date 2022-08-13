@@ -67,7 +67,7 @@ func (srv *server) CreateServer() *gin.Engine {
 }
 
 func (srv *server) registerMiddlewares(engine *gin.Engine) {
-	srv.logger.Info("Registering middlewares...")
+	srv.logger.Debug("Registering middlewares...")
 	for _, mid := range srv.middlewares {
 		m := gin.HandlerFunc(mid)
 		engine.Use(m)
@@ -75,7 +75,7 @@ func (srv *server) registerMiddlewares(engine *gin.Engine) {
 }
 
 func (srv *server) registerRouters(engine *gin.Engine) {
-	srv.logger.Info("Registering routers...")
+	srv.logger.Debug("Registering routers...")
 
 	for _, apiRouter := range srv.routers {
 		for _, route := range apiRouter.Routes() {
