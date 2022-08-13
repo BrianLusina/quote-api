@@ -161,12 +161,10 @@ func main() {
 		health.NewHealthRouter(),
 	}
 
-	// initialize routers
 	srv.InitRouter(routers...)
 
 	appServer := srv.CreateServer()
 
-	// start & run the server
 	err = appServer.Run(fmt.Sprintf(":%s", port))
 	if err != nil {
 		_, msg := fmt.Printf("Failed to start Server %s", err)

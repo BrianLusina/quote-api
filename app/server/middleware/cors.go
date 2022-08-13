@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"quote/api/app/config"
 
 	"github.com/gin-gonic/gin"
@@ -13,8 +14,12 @@ func NewCORSMiddleware(cors config.CorsConfig) Middleware {
 		context.Header("Access-Control-Allow-Headers", cors.AllowedHeaders)
 		context.Header("Access-Control-Allow-Credentials", cors.AllowCredentials)
 		context.Header("Access-Control-Max-Age", cors.MaxAge)
-		context.Header("Access-Control-Expose-Headers", cors.ExposedHeaders)
-		context.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
-		context.Header("Access-Control-Allow-Methods", "HEAD, GET, POST, DELETE, PUT, OPTIONS")
+
+		requestMethod := context.Request.Method
+
+		if requestMethod == "OPTIONS" {
+			context.AbortWithStatus(http.StatusNoContent)
+			return
+		}
 	}
 }

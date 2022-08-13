@@ -20,16 +20,11 @@ func NewAuthenticationMiddleware(config config.AuthConfig) Middleware {
 		username, password, hasAuth := ctx.Request.BasicAuth()
 
 		requestUrl := ctx.Request.URL
-		requestMethod := ctx.Request.Method
+		// requestMethod := ctx.Request.Method
 
 		requestPath := requestUrl.Path
 
 		if healthRegex.MatchString(requestPath) {
-			ctx.Next()
-			return
-		}
-
-		if requestMethod == "OPTIONS" {
 			ctx.Next()
 			return
 		}
