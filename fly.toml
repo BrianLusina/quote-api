@@ -7,7 +7,6 @@ processes = []
 
 [env]
   ENV = "release"
-  LOG_JSON_OUTPUT = "t"
   LOG_LEVEL = "info"
   PORT = "8080"
 
@@ -28,14 +27,14 @@ processes = []
     type = "connections"
 
   [[services.http_checks]]
-    grace_period = "5s"
+    grace_period = "30s"
     headers = []
-    interval = "10s"
+    interval = "5m"
     method = "get"
     path = "/health"
     protocol = "http"
     restart_limit = 0
-    timeout = "2s"
+    timeout = "30s"
     tls_skip_verify = false
 
   [[services.ports]]

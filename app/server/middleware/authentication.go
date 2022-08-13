@@ -20,6 +20,7 @@ func NewAuthenticationMiddleware(config config.AuthConfig) Middleware {
 		username, password, hasAuth := ctx.Request.BasicAuth()
 
 		requestUrl := ctx.Request.URL
+		requestMethod := ctx.Request.Method
 
 		requestPath := requestUrl.Path
 
@@ -28,9 +29,14 @@ func NewAuthenticationMiddleware(config config.AuthConfig) Middleware {
 			return
 		}
 
+		if requestMethod == "OPTIONS" {
+			ctx.Next()
+			return
+		}
+
 		if hasAuth {
 			if username == config.Username && password == config.Password {
-				log.Infof("User %s authenticated", username)
+				log.Debugf("User %s authenticated", username)
 				ctx.Set("user", username)
 				ctx.Next()
 			}
