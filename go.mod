@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/getsentry/sentry-go v0.15.0
 	github.com/gin-gonic/gin v1.8.1
-	github.com/go-redis/cache/v8 v8.4.3
+	github.com/go-redis/cache/v8 v8.4.4
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/joho/godotenv v1.4.0
 	github.com/pkg/errors v0.9.1
@@ -49,7 +49,6 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be // indirect
-	golang.org/x/exp v0.0.0-20210916165020-5cb4fee858ee // indirect
 	golang.org/x/net v0.0.0-20221002022538-bcab6841153b // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
