@@ -14,7 +14,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rs/xid v1.6.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	golang.org/x/text v0.28.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.1
