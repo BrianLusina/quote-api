@@ -5,8 +5,8 @@ go 1.24.0
 toolchain go1.24.1
 
 require (
-	github.com/getsentry/sentry-go v0.38.0
-	github.com/getsentry/sentry-go/gin v0.38.0
+	github.com/getsentry/sentry-go v0.39.0
+	github.com/getsentry/sentry-go/gin v0.39.0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-redis/cache/v8 v8.4.4
 	github.com/go-redis/redis/v8 v8.11.5
