@@ -2,21 +2,14 @@ package middleware
 
 import (
 	"quote/api/app/tools/logger"
-	"time"
+	"quote/api/app/utils/monitoring"
 
 	"github.com/gin-gonic/gin"
-
-	sentrygin "github.com/getsentry/sentry-go/gin"
 )
 
-func NewMonitoringMiddleware() Middleware {
+func NewMonitoringMiddleware(monitoring monitoring.Monitoring) Middleware {
 	log := logger.NewLogger("monitoring-log")
 	return func(ctx *gin.Context) {
-		sentrygin.New(sentrygin.Options{
-			Repanic: true,
-		})
-
-		hub := sentrygin.GetHubFromContext(ctx)
 
 		defer func() {
 			err := recover()
@@ -24,15 +17,8 @@ func NewMonitoringMiddleware() Middleware {
 			if err != nil {
 				log.Errorf("Error encountered %s", err)
 
-				if hub != nil {
-					log.Errorf("Exception captured")
-
-					hub.CaptureException(err.(error))
-					hub.Flush((time.Second * 5))
-				}
+				monitoring.CaptureException(err.(error))
 			}
 		}()
-
-		// ctx.Next()
 	}
 }
