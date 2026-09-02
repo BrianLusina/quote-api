@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/getsentry/sentry-go v0.49.0
-	github.com/getsentry/sentry-go/gin v0.48.0
+	github.com/getsentry/sentry-go/gin v0.49.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-redis/cache/v8 v8.4.4
 	github.com/go-redis/redis/v8 v8.11.5
@@ -56,8 +56,8 @@ require (
 	go.mongodb.org/mongo-driver/v2 v2.5.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/arch v0.22.0 // indirect
-	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
