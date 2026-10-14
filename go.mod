@@ -3,7 +3,7 @@ module quote/api
 go 1.26.0
 
 require (
-	github.com/getsentry/sentry-go v0.49.0
+	github.com/getsentry/sentry-go v0.50.0
 	github.com/getsentry/sentry-go/gin v0.49.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-redis/cache/v8 v8.4.4
@@ -59,6 +59,6 @@ require (
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
